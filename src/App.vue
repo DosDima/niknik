@@ -1,5 +1,5 @@
 <template>
-    <canvas class="canvas" id="canvas"></canvas>
+
     <h1>NIKꞰIN</h1>
     <div class="line"></div>
     <div class="player">
@@ -18,8 +18,9 @@
             </div>
         </div>
     </div>
-
+    <canvas class="canvas" id="canvas"></canvas>
     <audio class="audio" id="audio"></audio>
+
 </template>
 
 <script setup>
@@ -40,13 +41,7 @@ let audioEle
 let dataArray
 let posX
 
-function getRandomInt(min, max) {
-    min = Math.ceil(min);
-    max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min) + min);
-}
-
-function draw() {
+const draw = () => {
     if (!isDraw) {
         return
     }
@@ -55,40 +50,65 @@ function draw() {
     //Clear canvas
     ctx.value.clearRect(0, 0, width.value, height.value)
 
-    const barWidth = width.value / bufferLength
+    const barWidth = (width.value/2) / bufferLength
     posX = 0;
     const points = []
 
-    for (let i = 0; i < bufferLength; i++) {
+    for (let i = dataArray.length - 1; i > 5; i--) {
+        if(posX > width.value/2 - 160) continue
+
         points.push({
             x: posX,
-            y: dataArray[i] + 500
+            y: dataArray[i] + 120
         })
         posX += barWidth
     }
+
     points.push({
-        x: width.value,
-        y: points[points.length - 1].y
+        x: width.value/2 - 160,
+        y: 300
     })
 
-    for (let i = 0; i < 16; i++) {
+    points.push({
+        x: width.value/2 + 160,
+        y: 300
+    })
+
+    posX =  width.value/2 + 160 + barWidth
+
+    const tmpArr = [...points]
+
+    for (let i = tmpArr.length - 3; i > 0; i--) {
+        points.push({
+            x: posX,
+            y: points[i].y
+        })
+        posX += barWidth
+    }
+
+    points.push({
+        x: width.value,
+        y: points[points.length-1].y
+    })
+
+    for (let i = 0; i < 8; i++) {
         points.map((item) => {
-            item.y += i*2
+            item.y += 16+i*4
         })
         drawLine(ctx.value, points)
     }
     function drawLine(ctx, points){
         ctx.beginPath();
         ctx.moveTo(points[0].x, points[0].y);
+        ctx.strokeStyle = 'hsla(154, 100%, 69%, .7)';
 
         for (let i = 0; i < points.length; i++) {
-            ctx.strokeStyle = 'hsla(154, 100%, 69%, .7)';
+
             ctx.lineTo(points[i].x, points[i].y)
         }
         ctx.stroke()
         ctx.save()
     }
-
     window.requestAnimationFrame(draw);
 }
 
@@ -107,7 +127,7 @@ const playSound = () => {
 
     //Create analyser node
     analyser = audioCtx.createAnalyser();
-    analyser.fftSize = 256;
+    analyser.fftSize = 64;
     bufferLength = analyser.frequencyBinCount;
     dataArray = new Uint8Array(bufferLength);
 
@@ -119,6 +139,7 @@ const playSound = () => {
     isDraw = true
 
     audioEle.play()
+
     draw();
 }
 
@@ -131,10 +152,6 @@ onMounted(() => {
 
     elem.width = width.value
     elem.height = height.value
-
-    
-
-
 })
 </script>
 
