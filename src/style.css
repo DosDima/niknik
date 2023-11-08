@@ -1,89 +1,131 @@
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-text-size-adjust: 100%;
+    --black: hsla(1, 1%, 1%, 1);
+    --primary: hsla(154, 100%, 69%, 1);
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
-}
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
-
-.card {
-  padding: 2em;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    position: relative;
+    font-family: 'Times New Roman', Times, serif;
 }
 
 #app {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+
+    min-width: 100vw;
+    min-height: 100vh;
+
+    background-color: var(--black);
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+h1 {
+    margin: 1em 0 0 0;
+
+    max-width: 100%;
+    height: auto;
+
+    font-family: 'Noto Sans Linear B', sans-serif;
+    font-size: 3em;
+    font-weight: 400;
+    letter-spacing: 16px;
+    color: hsla(154, 100%, 69%, 1);
+    -webkit-box-reflect: below 0px linear-gradient(transparent, #111);
+}
+
+.line {
+    width: 80vw;
+    height: 2px;
+    background: rgb(0, 0, 0);
+    background: linear-gradient(45deg, #111 0%, hsla(154, 100%, 69%, 1) 50%, #111 100%);
+}
+
+.player {
+    display: flex;
+    flex-direction: column;
+
+    margin: 128px 0 0 0;
+    padding: 16px;
+
+    width: 320px;
+    height: 280px;
+
+    border-radius: 16px;
+
+    -webkit-box-shadow: 0px 0px 32px 0px rgba(97, 255, 186, 0.32);
+    -moz-box-shadow: 0px 0px 32px 0px rgba(97, 255, 186, 0.32);
+    box-shadow: 0px 0px 32px 0px rgba(97, 255, 186, 0.32);
+
+    overflow-y: scroll;
+    scrollbar-color: none;
+    scrollbar-width: none;
+}
+
+.player::-webkit-scrollbar-thumb {
+    box-shadow: inset 0 0 6px var(--primary);
+    border-radius: 8px;
+}
+
+.player::-webkit-scrollbar-track {
+    background-color: none;
+}
+
+.player::-webkit-scrollbar {
+    width: 10px;
+    background-color: none;
+}
+
+
+.player__track {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+
+    margin: 0 0 12px 0;
+    padding: 0 8px;
+
+    height: 42px;
+    min-height: 42px;
+    width: 100%;
+
+    border: 1px solid var(--primary);
+    opacity: .7;
+    border-radius: 8px;
+
+    cursor: pointer;
+
+    -webkit-box-shadow: 0px 0px 8px 0px rgba(97, 255, 186, 0.32);
+    -moz-box-shadow: 0px 0px 8px 0px rgba(97, 255, 186, 0.32);
+    box-shadow: 0px 0px 8px 0px rgba(97, 255, 186, 0.32);
+}
+
+.player__track:hover {
+    -webkit-box-shadow: 0px 0px 32px 0px rgba(97, 255, 186, 0.32);
+    -moz-box-shadow: 0px 0px 32px 0px rgba(97, 255, 186, 0.32);
+    box-shadow: 0px 0px 32px 0px rgba(97, 255, 186, 0.32);
+}
+
+.track__name {
+    color: aliceblue;
+    padding: 0 0 0 16px;
+    font-size: small;
+}
+
+.track__time {
+    color: aliceblue;
+    padding: 0 0 0 16px;
+    font-size: small;
+}
+
+.canvas {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    z-index: 0;
+    background-color: rgba(217, 145, 145, 0);
 }
