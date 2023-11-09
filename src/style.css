@@ -1,6 +1,7 @@
 :root {
-    --black: hsla(1, 1%, 1%, 1);
-    --primary: hsla(154, 100%, 69%, 1);
+    --black:  rgba(1,1,1,.9);
+    --primary: hsla(154, 100%, 69%, .4);
+    --text-primary: hsl(99, 30%, 87%);
 }
 
 * {
@@ -20,25 +21,26 @@
     min-width: 100vw;
     min-height: 100vh;
 
-    background-color: var(--black);
+    background-color: rgba(1,1,1,1);
 }
 
-h1 {
-    margin: 1em 0 0 0;
-
+.logo {
+    top: 256px;
+    left: 8px;
+    margin: 2em 0 0 0;
     max-width: 100%;
     height: auto;
-
     font-family: 'Noto Sans Linear B', sans-serif;
-    font-size: 3em;
+    font-size: 2em;
     font-weight: 400;
-    letter-spacing: 16px;
+    letter-spacing: -0.4px;
     color: hsla(154, 100%, 69%, 1);
-    -webkit-box-reflect: below 0px linear-gradient(transparent, #111);
+    -webkit-box-reflect: below 0px linear-gradient(transparent, var(--black));
 }
 
 .line {
-    width: 80vw;
+    top: 256px;
+    width: 42vw;
     height: 2px;
     background: rgb(0, 0, 0);
     background: linear-gradient(45deg, #111 0%, hsla(154, 100%, 69%, 1) 50%, #111 100%);
@@ -47,11 +49,16 @@ h1 {
 .player {
     display: flex;
     flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
 
-    margin: 128px 0 0 0;
+    top: 320px;
+
+    margin: 128px 16px;
     padding: 16px;
 
-    width: 320px;
+    max-width: 620px;
+    width: 90%;
     height: 320px;
 
     border-radius: 16px;
@@ -60,9 +67,9 @@ h1 {
     -moz-box-shadow: 0px 0px 32px 0px rgba(97, 255, 186, 0.32);
     box-shadow: 0px 0px 32px 0px rgba(97, 255, 186, 0.32);
 
-    overflow-y: scroll;
-    scrollbar-color: none;
-    scrollbar-width: none;
+    overflow-y: auto;
+    /*scrollbar-color: none;*/
+    /*scrollbar-width: none;*/
 
     z-index: 2;
     background-color: rgba(0,0,0,.7);
@@ -82,12 +89,11 @@ h1 {
     background-color: none;
 }
 
-
 .player__track {
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: space-between;
 
     margin: 0 0 12px 0;
     padding: 0 8px;
@@ -99,7 +105,6 @@ h1 {
     border: 1px solid var(--primary);
     opacity: .7;
     border-radius: 8px;
-
     cursor: pointer;
 
     -webkit-box-shadow: 0px 0px 8px 0px rgba(97, 255, 186, 0.32);
@@ -113,22 +118,27 @@ h1 {
     box-shadow: 0px 0px 32px 0px rgba(97, 255, 186, 0.32);
 }
 
+
+.track__text{
+    color: var(--text-primary);
+    font-size: .9em;
+    font-weight: 400;
+}
+
 .track__name {
-    color: aliceblue;
+
     padding: 0 0 0 16px;
-    font-size: small;
 }
 
 .track__time {
-    color: aliceblue;
     padding: 0 0 0 16px;
-    font-size: small;
 }
 
 .canvas {
     position: fixed;
-    bottom: 0;
+    top: 100px;
     left: 0;
     z-index: 0;
-    background-color: rgba(217, 145, 145, 0);
+    background-color: rgba(0,0,0,0);
+
 }

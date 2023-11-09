@@ -1,6 +1,5 @@
 <template>
-
-    <h1>NIKꞰIN</h1>
+    <div class="logo">NIKꞰIN</div>
     <div class="line"></div>
     <div class="player">
         <div class="player__track"
@@ -10,21 +9,21 @@
                  src="/play.svg"
                  alt="play"
             />
-            <div class="track__name">
+            <div class="track__name track__text">
                 Lorem ipsum dolor sit amet consectetur adipisicing elit.
             </div>
-            <div class="track__time">
+            <div class="track__time track__text">
                 1:42:45
             </div>
         </div>
     </div>
     <canvas class="canvas" id="canvas"></canvas>
     <audio class="audio" id="audio"></audio>
-
 </template>
 
 <script setup>
 import {onMounted, ref} from "vue";
+import getRndInt from "./helpers/getRndInt.js";
 
 const height = ref()
 const width = ref()
@@ -40,78 +39,60 @@ let bufferLength
 let audioEle
 let dataArray
 let posX
+let points = []
+let barWidth = 0
+let analyser_fftSize = 256
 
 const draw = () => {
-    if (!isDraw) {
-        return
-    }
+    if (!isDraw) return
     analyser.getByteFrequencyData(dataArray)
-
-    //Clear canvas
     ctx.value.clearRect(0, 0, width.value, height.value)
 
-    const barWidth = (width.value/2) / bufferLength
-    posX = 0;
-    const points = []
-
-    for (let i = dataArray.length - 1; i > 5; i--) {
-        if(posX > width.value/2 - 160) continue
-
-        points.push({
+    posX = 0
+    for (let i = 0; i < dataArray.length; i++) {
+        points[i] = {
             x: posX,
-            y: dataArray[i] + 120
-        })
+            y: 256 - dataArray[dataArray.length - 1 - i]
+        }
         posX += barWidth
     }
 
-    points.push({
-        x: width.value/2 - 160,
-        y: 300
-    })
+    points[points.length - 1].y = points[points.length - 2].y
 
-    points.push({
-        x: width.value/2 + 160,
-        y: 300
-    })
-
-    posX =  width.value/2 + 160 + barWidth
-
-    const tmpArr = [...points]
-
-    for (let i = tmpArr.length - 3; i > 0; i--) {
-        points.push({
+    for (let i = 0; i < dataArray.length; i++) {
+        points[i+dataArray.length] = {
             x: posX,
-            y: points[i].y
-        })
+            y: 256 - dataArray[i]
+        }
         posX += barWidth
     }
 
-    points.push({
-        x: width.value,
-        y: points[points.length-1].y
-    })
+    for (let i = points.length - 1; i > 1; i--) {
+        points[i].y = points[i - 1].y
+    }
 
     for (let i = 0; i < 8; i++) {
-        points.map((item) => {
-            item.y += 16+i*4
-        })
-        drawLine(ctx.value, points)
+        drawLine(ctx.value, points.map((item) => {
+            item.y += 4 * i
+            return item
+        }), `hsla(154, 100%, 69%, ${0.1+i/10})` )
     }
-    function drawLine(ctx, points){
-        ctx.beginPath();
-        ctx.moveTo(points[0].x, points[0].y);
-        ctx.strokeStyle = 'hsla(154, 100%, 69%, .7)';
-
-        for (let i = 0; i < points.length; i++) {
-
-            ctx.lineTo(points[i].x, points[i].y)
-        }
-        ctx.stroke()
-        ctx.save()
-    }
+    // drawLine(ctx.value, points)
     window.requestAnimationFrame(draw);
 }
 
+const drawLine = (ctx, points, color) => {
+    ctx.beginPath();
+    ctx.moveTo(points[0].x, points[0].y);
+    ctx.strokeStyle = color;
+
+    for (let i = 0; i < points.length; i++) {
+
+        ctx.lineTo(points[i].x, points[i].y)
+    }
+    ctx.stroke()
+    ctx.save()
+}
 const playSound = () => {
     if (isPlay) {
         audioEle.pause()
@@ -127,7 +108,7 @@ const playSound = () => {
 
     //Create analyser node
     analyser = audioCtx.createAnalyser();
-    analyser.fftSize = 64;
+    analyser.fftSize = analyser_fftSize ;
     bufferLength = analyser.frequencyBinCount;
     dataArray = new Uint8Array(bufferLength);
 
@@ -137,7 +118,6 @@ const playSound = () => {
 
     isPlay = true
     isDraw = true
-
     audioEle.play()
 
     draw();
@@ -151,9 +131,17 @@ onMounted(() => {
     ctx.value = elem.getContext('2d')
 
     elem.width = width.value
-    elem.height = height.value
+    elem.height = 400
+
+    barWidth = width.value / 256
+    posX = 0
+
+    for (let i = 0; i < 256; i++) {
+        points.push({
+            x: posX,
+            y: 256
+        })
+        posX += barWidth
+    }
 })
 </script>
-
-<style scoped>
-</style>
